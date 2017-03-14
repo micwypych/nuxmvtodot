@@ -37,20 +37,25 @@ def accumulate_states(states):
 def state_str(state):      
    return str(sorted(state[2].items()))
    
+#TODO state1_str
 def link_str(state1,state2):
-   return '"'+state_str(state1)+'"'+' -> '+'"'+state_str(state2)+'"'
+   return '"'+state1+'"'+' -> '+'"'+state2+'"'
    
+#TODO states->transition
 def to_dia(states):
    print('digraph structs {')
-   for i in range(len(states)-1):
-      s = link_str(states[i],states[i+1])
+   for state1,state2 in states:
+      s = link_str(state1,state2)
       print(s+';')
    print('}')
 
 def process_file(file_name):
    states = parse(open(file_name))
    processed_states = accumulate_states(states)
-   to_dia(processed_states)
+   states_str = map(state_str, processed_states);
+   zipped_states = zip(states_str[0:-2],states_str[1:])
+   set_of_states = set(zipped_states)
+   to_dia(set_of_states)
 
 def main(argv):
     for arg in argv:
